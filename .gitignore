@@ -1,5 +1,2 @@
-/starter/backend/env
-/starter/frontend/src
 /starter/frontend/node_modules
-starter/src.zip
-starter/trivia_app.zip
+/starter/backend/env/Lib/site-packages
