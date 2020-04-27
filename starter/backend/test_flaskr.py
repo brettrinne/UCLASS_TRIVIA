@@ -95,8 +95,8 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'unprocessable')
 
     def test_delete_question(self):
-        print(Question.query.first().id)
-        concat = '/questions/' + str(Question.query.first().id)
+        concat = '/questions/' + \
+            str(Question.query.order_by(Question.id.desc()).first().id)
         res = self.client().delete(concat)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
@@ -111,10 +111,14 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'unprocessable')
 
     def test_get_question_play_quiz(self):
+        quiz_cat = Category.query.first().format()
+        question = Question.query.filter(
+            Question.category == quiz_cat['id']).order_by(
+            Question.id).first()
         res = self.client().post('/quizzes',
                                  json={"quiz_category":
-                                       {"id": 5, "type": "Science"},
-                                       "previous_questions": [20]
+                                       quiz_cat,
+                                       "previous_questions": [question.id]
                                        })
         data = json.loads(res.data)
 
