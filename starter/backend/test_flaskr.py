@@ -18,7 +18,6 @@ class TriviaTestCase(unittest.TestCase):
         self.database_path = "postgres://{}:{}@{}/{}".format(
             'postgres', 'pass', 'localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
-        self.created_id = None
 
         self.new_question = {
             'question': "New Q test",
@@ -96,7 +95,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'unprocessable')
 
     def test_delete_question(self):
-        res = self.client().delete('/questions/17')
+        print(Question.query.first().id)
+        concat = '/questions/' + str(Question.query.first().id)
+        res = self.client().delete(concat)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
